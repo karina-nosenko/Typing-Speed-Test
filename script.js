@@ -1,17 +1,26 @@
 const testWrapper = document.querySelector(".test-wrapper");
 const testArea = document.querySelector("#test-area");
-const originText = document.querySelector("#origin-text p").innerHTML;
+const originTextArea = document.querySelector("#origin-text p");
 const resetButton = document.querySelector("#reset");
 const theTimer = document.querySelector(".timer");
 const resultsArea = document.querySelector(".results");
 const WPM = document.querySelector(".wpm");
 const ACCURACY = document.querySelector(".accuracy");
+var originText = document.querySelector("#origin-text p").innerHTML;
+
+var texts = [
+    "The text to test.",
+    "Type this paragraph. There is no need to press the enter key to start new lines.",
+    "The Moon is in constant rotation with Earth. This means it always shows the Earth the same face with its side marked by dark volcanic areas and impact craters.",
+    "Lions can live up to a decade while in the wild, and can live double that while captive. In the wild, males do not usually live longer than ten years. This is due to wounds from fighting with other males. Lions are called the king because of their power and strength and fear no other animals."
+];
 
 var timer = [0,0,0,0];
 var interval;
 var timerRunning = false;
 var charsTyped = -1;
 var errors = 0;
+var currentText = 0;
 
 // Add leading zero to numbers 9 or below (purely for aesthetics):
 function leadingZero(time) {
@@ -93,6 +102,14 @@ function reset() {
     timerRunning = false;
     charsTyped = -1;
     errors = 0;
+
+    currentText++;
+    if(currentText >= texts.length) {
+        currentText = 0;
+    }
+    originTextArea.innerHTML = texts[currentText];
+    originText = texts[currentText];
+
 
     testArea.value = "";
     theTimer.innerHTML = "00:00:00";
