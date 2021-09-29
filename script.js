@@ -27,6 +27,13 @@ function runTimer() {
     timer[2] = Math.floor(timer[3] - (timer[1] * 100) - (timer[0] * 6000));
 }
 
+// Count words per minute
+function wordsCount() {
+    let totalWordsNumber = originText.split(' ').length;
+    let wpm = Math.floor(totalWordsNumber/((timer[3]/100)/60));
+    console.log(wpm);
+}
+
 // Match the text entered with the provided text on the page:
 function spellCheck() {
     let textEntered = testArea.value;
@@ -35,6 +42,7 @@ function spellCheck() {
 
     if (textEntered == originText) {
         clearInterval(interval);
+        wordsCount();
         testWrapper.style.borderColor = "#429890";
     } else if (textEntered == originTextMatch) {
         testWrapper.style.borderColor = "#65CCf3";
