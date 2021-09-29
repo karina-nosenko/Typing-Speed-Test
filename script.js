@@ -3,6 +3,8 @@ const testArea = document.querySelector("#test-area");
 const originText = document.querySelector("#origin-text p").innerHTML;
 const resetButton = document.querySelector("#reset");
 const theTimer = document.querySelector(".timer");
+const resultsArea = document.querySelector(".results");
+const WPM = document.querySelector(".wpm");
 
 var timer = [0,0,0,0];
 var interval;
@@ -31,7 +33,8 @@ function runTimer() {
 function wordsCount() {
     let totalWordsNumber = originText.split(' ').length;
     let wpm = Math.floor(totalWordsNumber/((timer[3]/100)/60));
-    console.log(wpm);
+    WPM.innerHTML = wpm;
+    resultsArea.style.display = "block";
 }
 
 // Match the text entered with the provided text on the page:
@@ -70,6 +73,7 @@ function reset() {
     testArea.value = "";
     theTimer.innerHTML = "00:00:00";
     testWrapper.style.borderColor = "grey";
+    resultsArea.style.display = "none";
 }
 
 // Event listeners for keyboard input and the reset button:
