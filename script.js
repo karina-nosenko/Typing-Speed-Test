@@ -5,10 +5,13 @@ const resetButton = document.querySelector("#reset");
 const theTimer = document.querySelector(".timer");
 const resultsArea = document.querySelector(".results");
 const WPM = document.querySelector(".wpm");
+const ACCURACY = document.querySelector(".accuracy");
 
 var timer = [0,0,0,0];
 var interval;
 var timerRunning = false;
+var charsTyped = -1;
+var errors = 0;
 
 // Add leading zero to numbers 9 or below (purely for aesthetics):
 function leadingZero(time) {
@@ -37,8 +40,22 @@ function wordsCount() {
     resultsArea.style.display = "block";
 }
 
+// Calculate the accuracy
+function accuracyCalculate() {
+    let accuracy = Math.floor(100*(charsTyped-errors)/charsTyped);
+    ACCURACY.innerHTML = accuracy + '%';
+
+    if (accuracy >= 85) {
+        ACCURACY.style.color = "green";
+    } else if (accuracy >= 65) {
+        ACCURACY.style.color = "blue";
+    } else {
+        ACCURACY.style.color = "#E95D0F";
+    }
+}
+
 // Match the text entered with the provided text on the page:
-function spellCheck() {
+function spellCheck(e) {
     let textEntered = testArea.value;
     let textEnteredLength = textEntered.length;
     let originTextMatch = originText.substring(0, textEnteredLength);
@@ -46,10 +63,15 @@ function spellCheck() {
     if (textEntered == originText) {
         clearInterval(interval);
         wordsCount();
+        accuracyCalculate();
         testWrapper.style.borderColor = "#429890";
     } else if (textEntered == originTextMatch) {
         testWrapper.style.borderColor = "#65CCf3";
     } else {
+        if(e.key != "Backspace") {
+            errors++;
+            console.log(errors);
+        }
         testWrapper.style.borderColor = "#E95D0F";
     }
 }
@@ -69,6 +91,8 @@ function reset() {
     interval = null;
     timer = [0,0,0,0];
     timerRunning = false;
+    charsTyped = -1;
+    errors = 0;
 
     testArea.value = "";
     theTimer.innerHTML = "00:00:00";
@@ -77,15 +101,7 @@ function reset() {
 }
 
 // Event listeners for keyboard input and the reset button:
+testArea.addEventListener("keydown", () => charsTyped++, false);
 testArea.addEventListener("beforeinput", start, false);
 testArea.addEventListener("keyup", spellCheck, false);
 resetButton.addEventListener("click", reset, false);
-
-
-/*
-To Do:
-- words per minute count
-- errors count
-- array of different texts
-- high score board
-*/
